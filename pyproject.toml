@@ -1,0 +1,20 @@
+[build-system]
+# 说明项目使用的构建系统和要求的工具
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+# 项目的元数据
+name = "AutoMusicTheoryQA"
+version = "0.0.0"
+description = "A simple implementation for AutoMusicTheoryQA"
+authors = [{name = "Zhilin Wang", email = "linzwcs@gmail.com"}]
+license = {text = "MIT"}
+
+dependencies = []
+
+
+[tool.setuptools]
+packages = ["AutoMusicTheoryQA"]
+package-dir = {"" = "src"}
+

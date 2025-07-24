@@ -1,0 +1,8 @@
+pyproject.toml
+src/AutoMusicTheoryQA/__init__.py
+src/AutoMusicTheoryQA/main.py
+src/AutoMusicTheoryQA/prototype.py
+src/AutoMusicTheoryQA.egg-info/PKG-INFO
+src/AutoMusicTheoryQA.egg-info/SOURCES.txt
+src/AutoMusicTheoryQA.egg-info/dependency_links.txt
+src/AutoMusicTheoryQA.egg-info/top_level.txt
