@@ -12,24 +12,19 @@ import subprocess
 from tqdm import tqdm
 from copy import deepcopy
 
-from .beats import (TimeSignatureQuestion, BarLinePlacementQuestion)
+from .rhythm import (TimeSignatureQuestion, BarLinePlacementQuestion)
 from collections import defaultdict
-from .chords import ChordIdentificationQuestion, ChordsCompletionQuestion,ChordRootIdentificationQuestion,ChordKeyRootIdentificationQuestion
+from .chords import ChordIdentificationQuestion, ChordsCompletionQuestion, ChordRootIdentificationQuestion, ChordKeyRootIdentificationQuestion
 from .interval import IntervalNumberQuestion, NoteCompletionByInterval
 from .scale import ScaleSelectionQuestion, ScaleIdentificationFromAbcQuestion
 from .prototype import MusicSheet, MusicTheorySingleChoiceQuestion
 
 QUESTION_PROTOTYPES = [
-    TimeSignatureQuestion,
-    BarLinePlacementQuestion,
-    IntervalNumberQuestion,
-    NoteCompletionByInterval,
-    ChordIdentificationQuestion,
-    ChordsCompletionQuestion,
-    ScaleIdentificationFromAbcQuestion,
+    TimeSignatureQuestion, BarLinePlacementQuestion, IntervalNumberQuestion,
+    NoteCompletionByInterval, ChordIdentificationQuestion,
+    ChordsCompletionQuestion, ScaleIdentificationFromAbcQuestion,
     ScaleSelectionQuestion
 ]
-
 
 OPTION_TO_IMAGE = [
     BarLinePlacementQuestion.__name__,
@@ -37,7 +32,7 @@ OPTION_TO_IMAGE = [
     ChordsCompletionQuestion.__name__,
     ScaleSelectionQuestion.__name__,
 ]
-ABC_CONTEXT_TO_IAMGE=[
+ABC_CONTEXT_TO_IAMGE = [
     TimeSignatureQuestion.__name__,
     BarLinePlacementQuestion.__name__,
     IntervalNumberQuestion.__name__,
@@ -47,23 +42,30 @@ ABC_CONTEXT_TO_IAMGE=[
     ChordRootIdentificationQuestion.__name__,
     ChordKeyRootIdentificationQuestion.__name__,
     ScaleIdentificationFromAbcQuestion.__name__,
-    
 ]
+
+
 def convert_abc_to_image(abc, path: Path):
     tmp_abc = f"/tmp/{path.name}.abc"
     tmp_svg = f"/tmp/{path.name}.svg"
     with open(tmp_abc, "w") as f:
         f.write(f"X:1\n{abc}")
-    res=subprocess.run(["abcm2ps", "-v", tmp_abc, "-O", tmp_svg],capture_output=True, text=True)
-    
-    if res.stderr!="":
+    res = subprocess.run(["abcm2ps", "-v", tmp_abc, "-O", tmp_svg],
+                         capture_output=True,
+                         text=True)
+
+    if res.stderr != "":
         raise ValueError("error")
     tmp_svg = f"/tmp/{path.name}001.svg"
-    res=subprocess.run(["magick", "convert", tmp_svg, "-trim", "-quality","2000", str(path)],capture_output=True, text=True)
-   
-    if res.stderr!="":
+    res = subprocess.run(
+        ["magick", "convert", tmp_svg, "-trim", "-quality", "2000",
+         str(path)],
+        capture_output=True,
+        text=True)
+
+    if res.stderr != "":
         raise ValueError("error")
-    
+
     #cairosvg.svg2png(url=tmp_svg, write_to=str(path))
     return
 
@@ -105,56 +107,56 @@ def main():
         "output_dir",
         type=str,
     )
-    
+
     args = parser.parse_args()
 
     all_questions = []
-    input_path=Path(args.input_file)
+    input_path = Path(args.input_file)
     data = read_jsonl(input_path)
-    
+
     random.shuffle(data)
-    
-    original_questions=[]
+
+    original_questions = []
     out_dir = Path(args.output_dir)
     for item in tqdm(data):
-        item_clone=item.copy()
+        item_clone = item.copy()
         try:
             if item['abc_context']:
                 related_path = str(Path("images") / f"{str(uuid.uuid1())}.jpg")
-                convert_abc_to_image(item['abc_context'], out_dir / related_path)
+                convert_abc_to_image(item['abc_context'],
+                                     out_dir / related_path)
                 item['abc_context'] = related_path
 
             if item['class_name'] in OPTION_TO_IMAGE:
 
-                related_path =str(Path("images") / f"{str(uuid.uuid1())}.jpg")
+                related_path = str(Path("images") / f"{str(uuid.uuid1())}.jpg")
                 convert_abc_to_image(item['correct_answer'],
-                                    out_dir / related_path)
+                                     out_dir / related_path)
                 item['correct_answer'] = related_path
 
-                related_path =str(Path("images") / f"{str(uuid.uuid1())}.jpg")
+                related_path = str(Path("images") / f"{str(uuid.uuid1())}.jpg")
                 convert_abc_to_image(item['incorrect_answer1'],
-                                    out_dir / related_path)
+                                     out_dir / related_path)
                 item['incorrect_answer1'] = related_path
 
                 related_path = str(Path("images") / f"{str(uuid.uuid1())}.jpg")
                 convert_abc_to_image(item['incorrect_answer2'],
-                                    out_dir / related_path)
+                                     out_dir / related_path)
                 item['incorrect_answer2'] = related_path
 
                 related_path = str(Path("images") / f"{str(uuid.uuid1())}.jpg")
                 convert_abc_to_image(item['incorrect_answer3'],
-                                    out_dir / related_path)
+                                     out_dir / related_path)
 
                 item['incorrect_answer3'] = related_path
-            
+
             all_questions.append(item)
-            
+
             original_questions.append(item_clone)
         except:
             print("ERRoR in parsing")
-            
-        
-    write_jsonl(out_dir /("vqa_"+input_path.name), all_questions, 'w')
+
+    write_jsonl(out_dir / ("vqa_" + input_path.name), all_questions, 'w')
 
     write_jsonl(out_dir / (input_path.name), original_questions, 'w')
 

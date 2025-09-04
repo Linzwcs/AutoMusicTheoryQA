@@ -6,24 +6,18 @@ import argparse
 import random
 import re
 from dataclasses import asdict
-from .beats import (TimeSignatureQuestion, BarLinePlacementQuestion)
+from .rhythm import (TimeSignatureQuestion, BarLinePlacementQuestion)
 from collections import defaultdict
 from .chords import ChordIdentificationQuestion, ChordsCompletionQuestion, ChordKeyRootIdentificationQuestion, ChordRootIdentificationQuestion
 from .interval import IntervalNumberQuestion, NoteCompletionByInterval
 from .scale import ScaleSelectionQuestion, ScaleIdentificationFromAbcQuestion
 from .prototype import MusicSheet, MusicTheorySingleChoiceQuestion
 
-
 QUESTION_PROTOTYPES = [
-    TimeSignatureQuestion,
-    BarLinePlacementQuestion,
-    IntervalNumberQuestion,
-    NoteCompletionByInterval,
-    ChordIdentificationQuestion,
-    ChordsCompletionQuestion,
-    ChordRootIdentificationQuestion,
-    ChordKeyRootIdentificationQuestion,
-    ScaleIdentificationFromAbcQuestion,
+    TimeSignatureQuestion, BarLinePlacementQuestion, IntervalNumberQuestion,
+    NoteCompletionByInterval, ChordIdentificationQuestion,
+    ChordsCompletionQuestion, ChordRootIdentificationQuestion,
+    ChordKeyRootIdentificationQuestion, ScaleIdentificationFromAbcQuestion,
     ScaleSelectionQuestion
 ]
 
