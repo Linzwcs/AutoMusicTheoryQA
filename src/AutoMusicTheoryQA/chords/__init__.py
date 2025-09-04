@@ -1,0 +1,3 @@
+from .chords_completion import ChordsCompletionQuestion
+from .chords_identification import ChordIdentificationQuestion
+from .chord_root_identification import ChordKeyRootIdentificationQuestion, ChordRootIdentificationQuestion

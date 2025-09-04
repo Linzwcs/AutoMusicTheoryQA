@@ -3,19 +3,22 @@ import re
 import music21
 from fractions import Fraction
 
+
 @dataclass
 class MusicTheorySingleChoiceQuestion:
-    question:str
-    abc_context:str
+    class_name: str
+    question: str
+    abc_context: str
     correct_answer: str
-    incorrect_answer1:str 
-    incorrect_answer2:str 
-    incorrect_answer3:str
-    catagory:str
-    difficulty:str
-    
+    incorrect_answer1: str
+    incorrect_answer2: str
+    incorrect_answer3: str
+    category: str
+    difficulty: str
+
+
 class MusicSheet:
-   
+
     def __init__(self, abc_string: str) -> None:
         """
         初始化 MusicSheet 对象。
@@ -35,15 +38,14 @@ class MusicSheet:
         self._body_lines = []
         # 解析并分离谱头和谱身
         self._parse()
-        
 
     def _parse(self) -> None:
-      
+
         lines = self._abc_string.strip().split('\n')
-        
+
         # 正则表达式，用于匹配谱头行，例如 "T:Cooley's"
         header_pattern = re.compile(r"^[A-Z]:")
-        
+
         header_ended = False
         for line in lines:
             if not line.strip() or line.strip().startswith('%'):
@@ -55,7 +57,7 @@ class MusicSheet:
             else:
                 header_ended = True
                 self._body_lines.append(line)
-    
+
     @property
     def key(self) -> music21.key.Key:
         """使用 music21 的分析功能获取调性对象。"""
@@ -73,13 +75,14 @@ class MusicSheet:
             if ts:
                 return ts[0]
         return None
-    
+
     @property
     def default_note_length(self) -> Fraction:
         """从乐谱流中获取拍号对象。"""
-        header=self.header
-        numerator,denominator=re.findall(r"L:\s*(\d+)/(\d+)",header)[0]
+        header = self.header
+        numerator, denominator = re.findall(r"L:\s*(\d+)/(\d+)", header)[0]
         return Fraction(int(numerator), int(denominator))
+
     @property
     def header(self) -> str:
         """
@@ -89,7 +92,7 @@ class MusicSheet:
             str: 包含所有谱头信息的字符串，各行由换行符分隔。
         """
         return "\n".join(self._header_lines)
-    
+
     @property
     def body(self) -> str:
         """
@@ -99,9 +102,11 @@ class MusicSheet:
             str: 包含所有音符和音乐指令的字符串，各行由换行符分隔。
         """
         return "\n".join(self._body_lines)
-    
 
-    def get_first_n_measure(self, n: int, skip_first=True,drop_chord=False) -> str:
+    def get_first_n_measure(self,
+                            n: int,
+                            skip_first=True,
+                            drop_chord=False) -> str:
         """
         从谱身中提取前 n 个小节。
 
@@ -115,7 +120,7 @@ class MusicSheet:
         """
         if n <= 0:
             return ""
-            
+
         body_content = []
         for line in self._body_lines:
             line_without_comment = line.split('%')[0].strip()
@@ -125,25 +130,29 @@ class MusicSheet:
         full_body_str = "".join(body_content)
 
         measures = full_body_str.split('|')
-        
-        valid_measures = [measure.strip() for measure in measures if measure.strip()]
-        if skip_first==True:
-            first_n_measures = valid_measures[1:n+1]
+
+        valid_measures = [
+            measure.strip() for measure in measures if measure.strip()
+        ]
+        if skip_first == True:
+            first_n_measures = valid_measures[1:n + 1]
         else:
             first_n_measures = valid_measures[0:n]
-        
+
         if not first_n_measures:
             return ""
-        ret="|" + "|".join(first_n_measures) + "|"
+        ret = "|" + "|".join(first_n_measures) + "|"
         ret = re.sub(r'(:\|)|(\|:)', '|', ret)
         ret = re.sub(r'\|', ' | ', ret)
         if drop_chord:
-            ret=re.sub(r'".*?"',"",ret)
-        ret = re.sub(r'\s+'," ",ret).strip()
+            ret = re.sub(r'".*?"', "", ret)
+        ret = re.sub(r'\s+', " ", ret).strip()
         return ret
-    
+
+
 class BasePrototype:
+
     @staticmethod
-    def produce(self,music_sheet:MusicSheet)-> MusicTheorySingleChoiceQuestion:
+    def produce(self,
+                music_sheet: MusicSheet) -> MusicTheorySingleChoiceQuestion:
         raise NotImplementedError()
-    
