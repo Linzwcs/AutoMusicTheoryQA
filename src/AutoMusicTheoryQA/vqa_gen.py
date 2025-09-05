@@ -65,8 +65,6 @@ def convert_abc_to_image(abc, path: Path):
 
     if res.stderr != "":
         raise ValueError("error")
-
-    #cairosvg.svg2png(url=tmp_svg, write_to=str(path))
     return
 
 
