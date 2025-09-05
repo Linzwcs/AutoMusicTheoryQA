@@ -7,6 +7,7 @@
 
 This repository contains the official code and resources for the paper **"Synthesizing Sheet Music Problems for Evaluation and Reinforcement Learning"**.
 
+
 ## Abstract
 
 Enhancing the ability of Large Language Models (LLMs) and Multimodal Large Language Models (MLLMs) to interpret sheet music is a crucial step toward building AI musicians. However, current research lacks both evaluation benchmarks and training data for sheet music reasoning. To address this, we propose the idea of synthesizing sheet music problems grounded in music theory, which can serve both as evaluation benchmarks and as training data for reinforcement learning with verifiable rewards (RLVR). We introduce a data synthesis framework that generates verifiable sheet music questions in both textual and visual modalities, leading to the **Synthetic Sheet Music Reasoning Benchmark (SSMR-Bench)** and a complementary training set. Our results demonstrate that this approach not only advances model reasoning for sheet music but also unlocks new possibilities for AI-assisted music creation.
@@ -18,6 +19,8 @@ Enhancing the ability of Large Language Models (LLMs) and Multimodal Large Langu
 *   **SSMR-Bench & Training Data**: We release the **SSMR-Bench** benchmark and a corresponding training dataset to facilitate research in sheet music understanding.
 *   **Proven Effectiveness**: We show that training on our synthetic data significantly enhances model reasoning abilities in sheet music, with trained models surpassing GPT-4 on `MusicTheoryBench` and showing improved capabilities in music composition.
 
+
+## Updating...
 
 ## Getting Started
 
@@ -51,5 +54,5 @@ For any questions, please contact:
 *   `yangzhe@stu.scu.edu.cn`
 *   `yafuly@gmail.com`
 *   `chengyu@cse.cuhk.edu.hk`
-=======
-## Updating...
+
+
