@@ -19,20 +19,63 @@ Enhancing the ability of Large Language Models (LLMs) and Multimodal Large Langu
 *   **SSMR-Bench & Training Data**: We release the **SSMR-Bench** benchmark and a corresponding training dataset to facilitate research in sheet music understanding.
 *   **Proven Effectiveness**: We show that training on our synthetic data significantly enhances model reasoning abilities in sheet music, with trained models surpassing GPT-4 on `MusicTheoryBench` and showing improved capabilities in music composition.
 
-
-## Updating...
-
 ## Getting Started
 
 ### Prerequisites
 
+#### Python Libraries
+You will need Python 3.8+ and the following libraries. You can install them via pip:
+```bash
+pip install music21 tqdm
+```
+
+#### System Dependencies
+This framework requires two external command-line tools for converting ABC notation to images. They must be installed and accessible in your system's PATH.
+
+*   **`abcm2ps`**: A tool to convert ABC files to PostScript.
+*   **ImageMagick**: A suite of tools for image manipulation, specifically the `convert` command.
+
+**On Debian/Ubuntu:**
+```bash
+sudo apt-get update
+sudo apt-get install abcm2ps imagemagick
+```
+
 ### Installation
 
-### Data
+Clone the repository to your local machine:
+```bash
+git clone https://github.com/Linzwcs/AutoMusicTheoryQA.git
+cd AutoMusicTheoryQA
+pip install -e .
+```
 
+### Data Generation Pipeline
 
-### Evaluation
+Follow these steps to generate your own datasets.
 
+#### Step 1: Generate Textual Questions
+
+Use the `data_gen.py` script to generate questions from a source file containing ABC music. The input should be a JSONL file where each line is a JSON object with an `"abc_music"` key.
+
+```bash
+python -m AutoMusicTheoryQA.data_gen path/to/your/input_abc.jsonl path/to/text_output_dir
+```
+*   `AutoMusicTheoryQA` is the name of the main package directory.
+*   This will create several JSONL files in `path/to/text_output_dir`, such as `Rhythm.jsonl`, `Chord.jsonl`, etc.
+
+#### Step 2: Generate Visual (VQA) Questions
+
+Use the `vqa_gen.py` script to convert the textual datasets generated in Step 1 into visual datasets. This script will create an `images` subdirectory in your output directory.
+
+```bash
+
+python -m AutoMusicTheoryQA.vqa_gen path/to/text_output_dir/Rhythm.jsonl path/to/vqa_output_dir
+
+```
+*   The script will read `Rhythm.jsonl`, generate images for each question, and save a new `vqa_Rhythm.jsonl` in `path/to/vqa_output_dir`.
+*   The image files will be stored in `path/to/vqa_output_dir/images/`.
+*   **Note:** This process can be time-consuming as it involves generating an image for each data entry.
 
 ## Citation
 
