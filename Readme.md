@@ -3,7 +3,7 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-2509.04059-b31b1b.svg)](https://arxiv.org/abs/2509.04059)
 [![GitHub](https://img.shields.io/badge/GitHub-Repo-blue.svg)](https://github.com/Linzwcs/AutoMusicTheoryQA) <!--- Placeholder link -->
-[![Hugging Face Datasets](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-yellow)](https://huggingface.co/datasets/YOUR_USERNAME/SSMR-Bench) <!--- Placeholder link -->
+[![Hugging Face Datasets](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-yellow)](https://huggingface.co/datasets/Sylence/SSMR-Bench) <!--- Placeholder link -->
 
 This repository contains the official code and resources for the paper **"Synthesizing Sheet Music Problems for Evaluation and Reinforcement Learning"**.
 
